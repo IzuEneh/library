@@ -4,11 +4,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Library</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    
+    <div class="header">
+        <h1 class="title">Library</h1>
+    </div>
+    <div class="content">
+        <!-- form  -->
+        <form action="/">
+            <div class="formField">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title">
+            </div>
+
+            <div class="formField">
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author">
+            </div>
+
+            <div class="formField">
+                <label for="pages">Number of Pages: </label>
+                <input type="number" name="pages" id="pages">
+            </div>
+
+            <div class="formField">
+                <label for="is_read">Has it been read?</label>
+                <input type="checkbox" name="is_read" id="is_read">
+            </div>
+            <button id="add-button">+ Add book</button>
+        </form>
+        <ul class="books" id="books">
+        </ul>
+    </div>
 </body>
 </html>
