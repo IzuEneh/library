@@ -1,5 +1,12 @@
-const addButton = document.querySelector("#add-button");
+const submitButton = document.querySelector("#add-button");
 const bookList = document.querySelector("#books");
+
+//form inputs
+const titleInput = document.querySelector("#title");
+const authorInput = document.querySelector("#author");
+const pagesInput = document.querySelector("#pages");
+const isReadInput = document.querySelector("#is_read");
+const form = document.querySelector("#form");
 
 let mylibrary = [
 	new Book("the hobbit", "J.R.R Tolkien", 295, false),
@@ -20,15 +27,36 @@ Book.prototype.info = function () {
 	}`;
 };
 
-function addBookToLibrary() {
-	// take form controls
-	// create book object
-	// add to my library
-	// mylibrary.push(new Book(book.title, book.author, book.pages, book.isRead));
+mylibrary.forEach(addBookListElement);
+
+submitButton.addEventListener("click", addBookToLibrary);
+
+function addBookToLibrary(e) {
+	if (isFormInvalid()) {
+		console.log("form invalicd");
+		return;
+	}
+	e.preventDefault(e);
+	const book = new Book(
+		titleInput.value,
+		authorInput.value,
+		+pagesInput.value,
+		isReadInput.checked
+	);
+	mylibrary.push(book);
+	addBookListElement(book);
+	form.reset();
 }
 
-mylibrary.forEach((element) => {
+function addBookListElement(book) {
 	let listItem = document.createElement("li");
-	listItem.textContent = element.info();
+	listItem.textContent = book.info();
 	bookList.appendChild(listItem);
-});
+}
+
+function isFormInvalid() {
+	if (titleInput.value == "") return true;
+	if (authorInput.value == "") return true;
+	if (pagesInput.value == "") return true;
+	return false;
+}

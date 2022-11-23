@@ -14,27 +14,27 @@
     </div>
     <div class="content">
         <!-- form  -->
-        <form action="/">
+        <form action="#" id="form">
             <div class="formField">
                 <label for="title">Title:</label>
-                <input type="text" id="title" name="title">
+                <input type="text" id="title" name="title" required>
             </div>
 
             <div class="formField">
                 <label for="author">Author:</label>
-                <input type="text" id="author" name="author">
+                <input type="text" id="author" name="author" required>
             </div>
 
             <div class="formField">
                 <label for="pages">Number of Pages: </label>
-                <input type="number" name="pages" id="pages">
+                <input type="number" name="pages" id="pages" required>
             </div>
 
             <div class="formField">
                 <label for="is_read">Has it been read?</label>
                 <input type="checkbox" name="is_read" id="is_read">
             </div>
-            <button id="add-button">+ Add book</button>
+            <button id="add-button" type="submit">+ Add book</button>
         </form>
         <ul class="books" id="books">
         </ul>
