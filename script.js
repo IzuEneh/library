@@ -9,12 +9,13 @@ const isReadInput = document.querySelector("#is_read");
 const form = document.querySelector("#form");
 
 let mylibrary = [
-	new Book("the hobbit", "J.R.R Tolkien", 295, false),
-	new Book("the hobbit 2", "J.R.R Tolkien", 295, false),
-	new Book("Head first design patterns", "Freeman", 500, true),
+	new Book(0, "the hobbit", "J.R.R Tolkien", 295, false),
+	new Book(1, "the hobbit 2", "J.R.R Tolkien", 295, false),
+	new Book(2, "Head first design patterns", "Freeman", 500, true),
 ];
 
-function Book(title, author, pages, isRead) {
+function Book(index, title, author, pages, isRead) {
+	this.index = index;
 	this.title = title;
 	this.author = author;
 	this.pages = pages;
@@ -22,35 +23,79 @@ function Book(title, author, pages, isRead) {
 }
 
 Book.prototype.info = function () {
-	return `${this.title} by ${this.author}, ${this.pages} pages, ${
-		this.isRead ? "has been read" : "not read yet"
-	}`;
+	const bookCard = document.createElement("div");
+	bookCard.classList.add("book-card");
+
+	const title = document.createElement("h2");
+	title.classList.add("book-tile");
+	title.textContent = this.title;
+	bookCard.appendChild(title);
+
+	const author = createSpanElement(`author: ${this.author}`, ["author"]);
+	bookCard.appendChild(author);
+
+	const pages = createSpanElement(`${this.pages} pages`, ["page-number"]);
+	bookCard.appendChild(pages);
+
+	const isReadSpan = createSpanElement(this.isRead ? "read" : "not read", [
+		"is-read-field",
+		this.isRead ? "read" : "not-read",
+	]);
+	bookCard.appendChild(isReadSpan);
+
+	const deleteButton = document.createElement("button");
+	deleteButton.textContent = "remove";
+	deleteButton.classList.add("delete-button");
+	deleteButton.setAttribute("data-index", this.index);
+	deleteButton.addEventListener("click", deleteBook);
+	bookCard.appendChild(deleteButton);
+
+	return bookCard;
 };
 
 mylibrary.forEach(addBookListElement);
 
 submitButton.addEventListener("click", addBookToLibrary);
 
+function createSpanElement(textContent, classes) {
+	const span = document.createElement("span");
+	span.classList.add(...classes);
+	span.textContent = textContent;
+	return span;
+}
+
+function deleteBook(e) {
+	console.log(e);
+	const button = e.srcElement;
+	const index = button.parentNode.dataset.index;
+	mylibrary.splice(+index, 1);
+	bookList.textContent = "";
+	mylibrary.forEach(addBookListElement);
+}
+
 function addBookToLibrary(e) {
 	if (isFormInvalid()) {
-		console.log("form invalicd");
 		return;
 	}
 	e.preventDefault(e);
 	const book = new Book(
+		mylibrary.length,
 		titleInput.value,
 		authorInput.value,
 		+pagesInput.value,
 		isReadInput.checked
 	);
+	addBookListElement(book, mylibrary.length);
 	mylibrary.push(book);
-	addBookListElement(book);
 	form.reset();
 }
 
-function addBookListElement(book) {
+function addBookListElement(book, index) {
 	let listItem = document.createElement("li");
-	listItem.textContent = book.info();
+	const bookCard = book.info();
+	bookCard.setAttribute("data-index", index);
+
+	listItem.appendChild(bookCard);
 	bookList.appendChild(listItem);
 }
 

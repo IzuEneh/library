@@ -8,3 +8,41 @@ form {
     display: flex;
     flex-direction: column;
 }
+
+.books {
+    width: 75%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.book-card {
+    height: 200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+ul, li {
+    list-style: none;
+}
+
+.read {
+    background-color: rgb(147, 255, 147);
+    color: rgb(0, 61, 0);
+    width: 45%;
+    text-align: center;
+}
+
+.not-read {
+    background-color: rgb(255, 147, 147);
+    color: rgb(61, 0, 0);
+    width: 45%;
+    text-align: center;
+}
+
+.delete-button {
+    margin-top: 15px;
+    width: 50%;
+}
