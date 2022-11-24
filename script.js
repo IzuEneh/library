@@ -9,18 +9,21 @@ const isReadInput = document.querySelector("#is_read");
 const form = document.querySelector("#form");
 
 let mylibrary = [
-	new Book(0, "the hobbit", "J.R.R Tolkien", 295, false),
-	new Book(1, "the hobbit 2", "J.R.R Tolkien", 295, false),
-	new Book(2, "Head first design patterns", "Freeman", 500, true),
+	// new Book("the hobbit", "J.R.R Tolkien", 295, false),
+	// new Book("the hobbit 2", "J.R.R Tolkien", 295, false),
+	// new Book("Head first design patterns", "Freeman", 500, true),
 ];
 
-function Book(index, title, author, pages, isRead) {
-	this.index = index;
+function Book(title, author, pages, isRead) {
 	this.title = title;
 	this.author = author;
 	this.pages = pages;
 	this.isRead = isRead;
 }
+
+Book.prototype.toggleRead = function () {
+	this.isRead = !this.isRead;
+};
 
 Book.prototype.info = function () {
 	const bookCard = document.createElement("div");
@@ -43,12 +46,7 @@ Book.prototype.info = function () {
 	]);
 	bookCard.appendChild(isReadSpan);
 
-	const deleteButton = document.createElement("button");
-	deleteButton.textContent = "remove";
-	deleteButton.classList.add("delete-button");
-	deleteButton.setAttribute("data-index", this.index);
-	deleteButton.addEventListener("click", deleteBook);
-	bookCard.appendChild(deleteButton);
+	bookCard.appendChild(createButtonBar(this));
 
 	return bookCard;
 };
@@ -56,6 +54,25 @@ Book.prototype.info = function () {
 mylibrary.forEach(addBookListElement);
 
 submitButton.addEventListener("click", addBookToLibrary);
+
+function createButtonBar(book) {
+	const buttonBar = document.createElement("div");
+	buttonBar.classList.add("button-bar");
+
+	const deleteButton = document.createElement("button");
+	deleteButton.textContent = "remove";
+	deleteButton.classList.add("delete-button", "button");
+	deleteButton.addEventListener("click", deleteBook);
+	buttonBar.appendChild(deleteButton);
+
+	const readButton = document.createElement("button");
+	readButton.textContent = book.isRead ? "forget" : "read";
+	readButton.classList.add("read-button", "button");
+	readButton.addEventListener("click", toggleReadStatus);
+	buttonBar.appendChild(readButton);
+
+	return buttonBar;
+}
 
 function createSpanElement(textContent, classes) {
 	const span = document.createElement("span");
@@ -65,10 +82,19 @@ function createSpanElement(textContent, classes) {
 }
 
 function deleteBook(e) {
-	console.log(e);
 	const button = e.srcElement;
 	const index = button.parentNode.dataset.index;
 	mylibrary.splice(+index, 1);
+	bookList.textContent = "";
+	mylibrary.forEach(addBookListElement);
+}
+
+function toggleReadStatus(e) {
+	// console.log(e);
+	const index = +e.srcElement.parentNode.parentNode.dataset.index;
+	const book = mylibrary[index];
+	book.toggleRead();
+	mylibrary.splice(index, 1, book);
 	bookList.textContent = "";
 	mylibrary.forEach(addBookListElement);
 }
@@ -79,7 +105,6 @@ function addBookToLibrary(e) {
 	}
 	e.preventDefault(e);
 	const book = new Book(
-		mylibrary.length,
 		titleInput.value,
 		authorInput.value,
 		+pagesInput.value,

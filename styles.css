@@ -42,7 +42,19 @@ ul, li {
     text-align: center;
 }
 
-.delete-button {
+/* .delete-button {
     margin-top: 15px;
     width: 50%;
+} */
+
+.button {
+    width: 100%;
+}
+
+.button-bar {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10%;
+    width: 60%;
 }
