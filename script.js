@@ -8,48 +8,51 @@ const pagesInput = document.querySelector("#pages");
 const isReadInput = document.querySelector("#is_read");
 const form = document.querySelector("#form");
 
-let mylibrary = [
-	// new Book("the hobbit", "J.R.R Tolkien", 295, false),
-	// new Book("the hobbit 2", "J.R.R Tolkien", 295, false),
-	// new Book("Head first design patterns", "Freeman", 500, true),
-];
+let mylibrary = [];
 
-function Book(title, author, pages, isRead) {
-	this.title = title;
-	this.author = author;
-	this.pages = pages;
-	this.isRead = isRead;
+class Book {
+	title;
+	author;
+	pages;
+	isRead;
+
+	constructor(title, author, pages, isRead) {
+		this.title = title;
+		this.author = author;
+		this.pages = pages;
+		this.isRead = isRead;
+	}
+
+	toggleRead() {
+		this.isRead = !this.isRead;
+	}
+
+	info() {
+		const bookCard = document.createElement("div");
+		bookCard.classList.add("book-card");
+
+		const title = document.createElement("h2");
+		title.classList.add("book-tile");
+		title.textContent = this.title;
+		bookCard.appendChild(title);
+
+		const author = createSpanElement(`author: ${this.author}`, ["author"]);
+		bookCard.appendChild(author);
+
+		const pages = createSpanElement(`${this.pages} pages`, ["page-number"]);
+		bookCard.appendChild(pages);
+
+		const isReadSpan = createSpanElement(this.isRead ? "read" : "not read", [
+			"is-read-field",
+			this.isRead ? "read" : "not-read",
+		]);
+		bookCard.appendChild(isReadSpan);
+
+		bookCard.appendChild(createButtonBar(this));
+
+		return bookCard;
+	}
 }
-
-Book.prototype.toggleRead = function () {
-	this.isRead = !this.isRead;
-};
-
-Book.prototype.info = function () {
-	const bookCard = document.createElement("div");
-	bookCard.classList.add("book-card");
-
-	const title = document.createElement("h2");
-	title.classList.add("book-tile");
-	title.textContent = this.title;
-	bookCard.appendChild(title);
-
-	const author = createSpanElement(`author: ${this.author}`, ["author"]);
-	bookCard.appendChild(author);
-
-	const pages = createSpanElement(`${this.pages} pages`, ["page-number"]);
-	bookCard.appendChild(pages);
-
-	const isReadSpan = createSpanElement(this.isRead ? "read" : "not read", [
-		"is-read-field",
-		this.isRead ? "read" : "not-read",
-	]);
-	bookCard.appendChild(isReadSpan);
-
-	bookCard.appendChild(createButtonBar(this));
-
-	return bookCard;
-};
 
 mylibrary.forEach(addBookListElement);
 
@@ -90,7 +93,6 @@ function deleteBook(e) {
 }
 
 function toggleReadStatus(e) {
-	// console.log(e);
 	const index = +e.srcElement.parentNode.parentNode.dataset.index;
 	const book = mylibrary[index];
 	book.toggleRead();
